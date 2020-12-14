@@ -13,11 +13,11 @@ interface ISchema {
     /** 类型校验 */
     type?: "string" | "boolean" | "number";
     /** 使用正则、函数或组合进行多重校验 */
-    check?: RegExp | Function | (RegExp | Function)[];
+    check?: RegExp | ((v: string) => any) | (RegExp | ((v: string) => any))[];
     /** 使用其他对象、正则、函数，若其中一个校验通过，即忽略当前校验 */
-    passOf?: (string | RegExp | Function)[];
+    passOf?: (string | RegExp | ((v: string) => any))[];
     /** 使用其他对象、正则、函数，必须其中一个校验通过 */
-    checkOf?: (string | RegExp | Function)[];
+    checkOf?: (string | RegExp | ((v: string) => any))[];
     /** 正则校验对象是否为时间格式 */
     time?: number | boolean;
     /** 正则校验对象是否为日期格式 */
