@@ -43,8 +43,8 @@ interface ISchema {
   cnPhone?: number | boolean;
   /** 正则校验对象是否为 字母和数字 */
   azAZ09?: number | boolean;
-  /** 正则校验对象是否为 大陆身份证，包括1代和2代 */
-  cnId?: number | boolean;
+  /** 正则校验对象是否为 大陆身份证，仅支持18位二代身份证 */
+  cnIdCard?: number | boolean;
   /** 正则校验对象是否为 大陆企业机构代码证 */
   cnCompany?: number | boolean;
   /** 正则校验对象是否为 url */

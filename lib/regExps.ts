@@ -1,4 +1,4 @@
-import { message as regExps } from "./message";
+import { message, message as regExps } from "./message";
 
 export const min = (min: number) => (v: string) => {
   if (typeof v !== "string") {
@@ -46,15 +46,13 @@ export const letter = () => /^[a-zA-Z]+$/;
 /** 密码 */
 export const password = (nums: number[]) => {
   const [min = 6, max = 30] = nums;
-  return new RegExp(
-    `^\S*(?=\S{${min},${max}})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$`
-  );
+  return new RegExp(`^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{${min},${max}}$`);
 };
 
 /** 账号 */
 export const account = (nums: number[]) => {
   const [min = 6, max = 30] = nums;
-  return new RegExp(`^[a-zA-Z]\w{${min},${max}}$`);
+  return new RegExp(`^[a-zA-Z]\\w{${min},${max}}$`);
 };
 
 /** 国内座机 */
@@ -65,9 +63,28 @@ export const cnPhone = () => /^(?:(?:\+|00)86)?1\d{10}$/;
 export const wechat = () => /^[a-zA-Z][-_a-zA-Z0-9]{5,19}$/;
 /** 字母和数字 */
 export const azAZ09 = () => /^[A-Za-z0-9]+$/;
-/** 国内身份证号 支持 15位和18位 */
-export const cnId = () =>
-  /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0[1-9]|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/;
+/** 国内身份证号 仅支持18位 */
+export const cnIdCard = () => {
+  return (val: any) => {
+    const p = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+    const factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+    const parity = [1, 0, "X", 9, 8, 7, 6, 5, 4, 3, 2];
+    const code = val.substring(17);
+    if (p.test(val)) {
+      let sum = 0;
+      for (let i = 0; i < 17; i++) {
+        sum += val[i] * factor[i];
+      }
+      if (parity[sum % 11] == code.toUpperCase()) {
+        return true;
+      }
+    }
+    return (k: string, lang: "zh" | "en") => {
+      throw message[lang].paramsIsError(k);
+    };
+  };
+};
+
 /** 国内企业机构代码证 */
 export const cnCompany = () =>
   /^(([0-9A-Za-z]{15})|([0-9A-Za-z]{18})|([0-9A-Za-z]{20}))$/;

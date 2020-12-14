@@ -84,7 +84,7 @@ describe("check single soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          type: "bool",
+          type: "boolean",
         },
       })({ dog: "20aaaaaaaaaaaa" })
     );

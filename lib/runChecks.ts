@@ -1,4 +1,4 @@
-import { errors } from ".";
+import { message } from "./message";
 
 export function runChecks(fn: any, value: any, key: any, lang: "zh" | "en") {
   let error: any;
@@ -9,12 +9,12 @@ export function runChecks(fn: any, value: any, key: any, lang: "zh" | "en") {
     });
   }
   if (kind === "[object RegExp]") {
-    if (value === void 0 || value === "" || value === null) {
-      error = errors[lang].paramsIsEmpty(key);
+    if (typeof value !== "string") {
+      error = message[lang].typeError(key, "string");
     } else {
       error = fn.test(value);
       if (error === false) {
-        throw errors[lang].paramsIsError(key);
+        throw message[lang].paramsIsError(key);
       }
     }
   } else if (typeof fn === "function") {
