@@ -9,6 +9,18 @@ describe("check single soke", () => {
           min: 10,
           oneOf: ["fish"],
         },
+      })(null, "zh")
+    );
+    expect(res).toMatch(/参数对象不能为空/);
+  });
+  test("check min need string", async () => {
+    const res = await errorGet(() =>
+      soke({
+        dog: {
+          max: 20,
+          min: 10,
+          oneOf: ["fish"],
+        },
       })({ dog: 500 }, "zh")
     );
     expect(res).toMatch(/的类型应该为/);

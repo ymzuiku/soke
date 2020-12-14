@@ -1,18 +1,8 @@
-export declare const errors: {
-    zh: {
-        bodyIsNotObject: () => string;
-        paramsIsEmpty: (k: string) => string;
-        paramsIsError: (k: string) => string;
-        ignoreNeedParams: (k: string) => string;
-    };
-    en: {
-        bodyIsNotObject: () => string;
-        paramsIsEmpty: (k: string) => string;
-        paramsIsError: (k: string) => string;
-        ignoreNeedParams: (k: string) => string;
-    };
-};
-declare function soke<S>(schema: S, lang?: "zh" | "en"): (obj: any) => {
+import * as regExps from "./regExps";
+import { message } from "./message";
+import { Soke } from "./types";
+export { regExps, message };
+declare function soke<S extends Soke>(schema: S): (obj: any, lang?: "zh" | "en") => {
     [K in keyof S]: S[K] | any;
 };
 export default soke;

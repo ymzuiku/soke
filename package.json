@@ -7,7 +7,7 @@
   "private": false,
   "scripts": {
     "test": "jest --watchAll --detectOpenHandles",
-    "test-c": "jest --watchAll --coverage --detectOpenHandles",
+    "test-c": "jest --coverage --detectOpenHandles",
     "lib": "node rollup.config.js"
   },
   "devDependencies": {

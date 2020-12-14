@@ -13,8 +13,8 @@ function soke<S extends Soke>(
   return (obj: any, lang: "zh" | "en" = "zh") => {
     const msg = message[lang];
 
-    const runError = () => {
-      if (typeof obj !== "object") {
+    const getError = () => {
+      if (!obj || typeof obj !== "object") {
         return msg.bodyIsNotObject();
       }
       const list = Object.keys(schema);
@@ -38,13 +38,18 @@ function soke<S extends Soke>(
                     [_k]: obj[_k],
                   });
                   haveRight = true;
-                } catch (err) {}
+                } catch (err) {
+                  // ignore oneOf
+                }
               }
+              continue;
             } else {
               try {
                 runChecks(_k, value, key, lang);
                 haveRight = true;
-              } catch (err) {}
+              } catch (err) {
+                // ignore oneOf
+              }
             }
 
             if (haveRight) {
@@ -104,7 +109,7 @@ function soke<S extends Soke>(
       }
     };
 
-    const error = runError();
+    const error = getError();
     if (error) {
       throw error;
     }

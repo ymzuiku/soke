@@ -37,7 +37,7 @@ const watchOptions = [
     output: {
       file: "./umd/index.js",
       format: "umd",
-      name: "fmt",
+      name: "soke",
       sourcemap: true,
       globals: {},
     },
