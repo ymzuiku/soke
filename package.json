@@ -1,6 +1,6 @@
 {
   "name": "soke",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "main": "umd/index.js",
   "types": "und/index.d.ts",
   "description": "轻量级快速校验数据",

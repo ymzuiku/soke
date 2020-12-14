@@ -1,5 +1,8 @@
 import soke from "../lib/index";
 import errorGet from "error-get";
+
+soke.baseLangaue = "zh";
+
 describe("check soke", () => {
   test("check fn error", async () => {
     const res = await errorGet(() =>

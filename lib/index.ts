@@ -48,7 +48,7 @@ function arrayOf(
 function soke<S extends Soke>(
   schema: S
 ): (obj: any, lang?: "zh" | "en") => { [K in keyof S]: S[K] | any } {
-  return (obj: any, lang: "zh" | "en" = "zh") => {
+  return (obj: any, lang: "zh" | "en" = soke.baseLangaue as any) => {
     const msg = message[lang];
 
     if (!obj || typeof obj !== "object") {
@@ -128,5 +128,7 @@ function soke<S extends Soke>(
     return obj;
   };
 }
+
+soke.baseLangaue = "en";
 
 export default soke;

@@ -1,5 +1,7 @@
-export declare const min: (min: number) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
-export declare const max: (max: number) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
+export declare const minNum: (min: number) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
+export declare const maxNum: (max: number) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
+export declare const minLength: (min: number) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
+export declare const maxLength: (max: number) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
 /** 时间 */
 export declare const time: () => RegExp;
 /** 日期 */
