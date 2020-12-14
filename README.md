@@ -157,3 +157,19 @@ export interface Soke {
   [key: string]: ISchema;
 }
 ```
+
+## Test
+
+Run test
+
+```sh
+$ npm run test-s
+```
+
+```sh
+Test Suites
+8 passed, 8 total
+
+Tests
+41 passed, 41 total
+```
