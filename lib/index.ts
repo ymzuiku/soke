@@ -21,7 +21,7 @@ function arrayOf(
   for (let i = 0; i < fn.length; i++) {
     const _k = fn[i];
     if (typeof _k === "string") {
-      if (schema[_k]) {
+      if (schema[_k] && key !== _k) {
         try {
           soke({ [_k]: schema[_k] })({
             [_k]: obj[_k],

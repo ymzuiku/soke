@@ -1,6 +1,26 @@
 import { message, message as regExps } from "./message";
 
-export const min = (min: number) => (v: string) => {
+export const minNum = (min: number) => (v: string) => {
+  if (typeof v !== "number") {
+    return (k: string, lang: "zh" | "en") =>
+      regExps[lang].typeError(k, "string");
+  }
+  if (v < min) {
+    return (k: string, lang: "zh" | "en") => regExps[lang].minError(k, min);
+  }
+};
+
+export const maxNum = (max: number) => (v: string) => {
+  if (typeof v !== "number") {
+    return (k: string, lang: "zh" | "en") =>
+      regExps[lang].typeError(k, "string");
+  }
+  if (v > max) {
+    return (k: string, lang: "zh" | "en") => regExps[lang].maxError(k, max);
+  }
+};
+
+export const minLength = (min: number) => (v: string) => {
   if (typeof v !== "string") {
     return (k: string, lang: "zh" | "en") =>
       regExps[lang].typeError(k, "string");
@@ -10,7 +30,7 @@ export const min = (min: number) => (v: string) => {
   }
 };
 
-export const max = (max: number) => (v: string) => {
+export const maxLength = (max: number) => (v: string) => {
   if (typeof v !== "string") {
     return (k: string, lang: "zh" | "en") =>
       regExps[lang].typeError(k, "string");

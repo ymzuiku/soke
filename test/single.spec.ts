@@ -5,8 +5,8 @@ describe("check single soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          max: 20,
-          min: 10,
+          maxLength: 20,
+          minLength: 10,
           oneOf: ["fish"],
         },
       })(null, "zh")
@@ -17,8 +17,8 @@ describe("check single soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          max: 20,
-          min: 10,
+          maxLength: 20,
+          minLength: 10,
           passOf: ["fish"],
         },
       })({ dog: 500 }, "zh")
@@ -30,8 +30,8 @@ describe("check single soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          max: 20,
-          min: 10,
+          maxLength: 20,
+          minLength: 10,
           passOf: ["fish"],
         },
       })({ dog: "do" })
@@ -43,8 +43,8 @@ describe("check single soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          max: 20,
-          min: 10,
+          maxLength: 20,
+          minLength: 10,
           passOf: ["fish"],
         },
       })({ dog: "20aaaaaaaaaaaaaaaaaaaaaaa" })
@@ -56,8 +56,8 @@ describe("check single soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          max: 20,
-          min: 10,
+          maxLength: 20,
+          minLength: 10,
           optional: 1,
         },
       })({ cat: "20aaaaaaaaaaaa" })
@@ -69,8 +69,8 @@ describe("check single soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          max: 20,
-          min: 10,
+          maxLength: 20,
+          minLength: 10,
           type: "boolean",
         },
       })({ cat: "20aaaaaaaaaaaa" })
@@ -82,8 +82,8 @@ describe("check single soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          max: 20,
-          min: 10,
+          maxLength: 20,
+          minLength: 10,
           type: "boolean",
           pass: 1,
         },

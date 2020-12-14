@@ -3,7 +3,7 @@
   "version": "0.0.5",
   "main": "umd/index.js",
   "types": "und/index.d.ts",
-  "description": "Simple SQL escape and format for MySQL and Postgres and easy create Ojbect to SQL",
+  "description": "轻量级快速校验数据",
   "private": false,
   "scripts": {
     "test": "jest --watchAll --detectOpenHandles",

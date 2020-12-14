@@ -5,8 +5,8 @@ describe("check checkOf soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          min: 10,
-          max: 20,
+          minLength: 10,
+          maxLength: 20,
         },
         fish: {
           checkOf: [
@@ -14,7 +14,7 @@ describe("check checkOf soke", () => {
             (v: string) => v.length > 300,
           ],
         },
-      })({ dog: "aaaaaaaaaaaa", fish: "the fish" }, "zh")
+      })({ dog: "aaaaaaaaaa", fish: "the fish" }, "zh")
     );
 
     expect(res).toMatch(/格式不正确/);
@@ -24,8 +24,8 @@ describe("check checkOf soke", () => {
     const res = await errorGet(() =>
       soke({
         dog: {
-          min: 10,
-          max: 20,
+          minLength: 10,
+          maxLength: 20,
         },
         fish: {
           checkOf: [(v: string) => v.length > 2, (v: string) => v.length > 300],

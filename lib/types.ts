@@ -1,9 +1,11 @@
 interface ISchema {
   /** 最小长度，并且必须为字符串 */
   min?: number;
+  max?: number;
+  minNum?: number;
+  maxNum?: number;
   message?: (key: string, value: string, lang: string) => string;
   /** 最大长度，并且必须为字符串 */
-  max?: number;
   /** 可以为空 */
   optional?: number | boolean;
   /** 忽略校验 */

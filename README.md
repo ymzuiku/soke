@@ -22,3 +22,17 @@ import soke from "sock";
 ```
 
 ## Use
+
+```js
+const schema = soke({
+  name: {
+    min: 4,
+    max: 12,
+    check: /Abc/,
+  },
+  age: {
+    type: "number",
+  },
+});
+const { name, age } = schema({ name: "Abcdefg", age: 50 });
+```
