@@ -77,4 +77,70 @@ describe("check group soke", () => {
     );
     expect(res).toMatch(/格式不正确/);
   });
+
+  test("url http success", async () => {
+    const res = await errorGet(() =>
+      soke({
+        dog: {
+          url: 1,
+        },
+      })({ dog: "http://123.com" })
+    );
+    expect(res.dog).toMatch(/http/);
+  });
+
+  test("url https success", async () => {
+    const res = await errorGet(() =>
+      soke({
+        dog: {
+          url: 1,
+        },
+      })({ dog: "https://123.com" })
+    );
+    expect(res.dog).toMatch(/http/);
+  });
+
+  test("url http ip success", async () => {
+    const res = await errorGet(() =>
+      soke({
+        dog: {
+          url: 1,
+        },
+      })({ dog: "http://127.0.0.1:3000" })
+    );
+    expect(res.dog).toMatch(/http/);
+  });
+
+  test("url http error", async () => {
+    const res = await errorGet(() =>
+      soke({
+        dog: {
+          url: 1,
+        },
+      })({ dog: "http://aaa" })
+    );
+    expect(res).toMatch(/格式不正确/);
+  });
+
+  test("check ip error", async () => {
+    const res = await errorGet(() =>
+      soke({
+        dog: {
+          subIp: 1,
+        },
+      })({ dog: "255.255.0" })
+    );
+    expect(res).toMatch(/格式不正确/);
+  });
+
+  test("check ip success", async () => {
+    const res = await errorGet(() =>
+      soke({
+        dog: {
+          subIp: 1,
+        },
+      })({ dog: "255.255.0.1" })
+    );
+    expect(res.dog).toMatch(/255/);
+  });
 });

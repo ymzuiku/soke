@@ -1,6 +1,7 @@
 interface ISchema {
   /** 最小长度，并且必须为字符串 */
   min?: number;
+  message?: (key: string, value: string, lang: string) => string;
   /** 最大长度，并且必须为字符串 */
   max?: number;
   /** 可以为空 */
@@ -51,8 +52,8 @@ interface ISchema {
   url?: number | boolean;
   /** 正则校验对象是否为 版本格式，如 1.0.0 */
   version?: number | boolean;
-  /** 正则校验对象是否为 ip */
-  ip?: number | boolean;
+  /** 正则校验对象是否为 子网掩码 */
+  subIp?: number | boolean;
   /** 正则校验对象是否为 大陆邮编 */
   cnPostalCode?: number | boolean;
   /** 正则校验对象是否为 大陆、香港、澳门护照 */
