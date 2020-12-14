@@ -6,7 +6,7 @@ soke.baseLangaue = "zh";
 describe("check time", () => {
   test("time ", async () => {
     const res = await errorGet(() => {
-      console.time("use time 500x");
+      // console.time("use time 500x");
       let a: any;
       for (let i = 0; i < 500; i++) {
         a = soke({
@@ -20,7 +20,7 @@ describe("check time", () => {
           },
         })({ dog1: "aaaa500", dog2: "aaaaaaaa" }, "zh");
       }
-      console.timeEnd("use time 500x");
+      // console.timeEnd("use time 500x");
       return a;
     });
     expect(res.dog1).toMatch(/aaa/);

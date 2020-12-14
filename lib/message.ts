@@ -5,8 +5,14 @@ export const message = {
     paramsIsError: (k: string) => `参数 ${k} 格式不正确`,
     ignoreNeedParams: (k: string) => `缺少必要参数 ${k}`,
     typeError: (k: string, t: string) => `参数 ${k} 的类型应该为 ${t}`,
-    minError: (k: string, len: number) => `参数 ${k} 长度应不小于 ${len} 位`,
-    maxError: (k: string, len: number) => `参数 ${k} 长度应不大于 ${len} 位`,
+    minLengthError: (k: string, len: number) =>
+      `参数 ${k} 长度应不小于 ${len} 位`,
+    maxLengthError: (k: string, len: number) =>
+      `参数 ${k} 长度应不大于 ${len} 位`,
+    minNumError: (k: string, len: number) => `参数 ${k} 应不小于 ${len}`,
+    maxNumError: (k: string, len: number) => `参数 ${k} 应不大于 ${len}`,
+    pickError: (k: string, list: any[]) =>
+      `参数 ${k} 的值不属于 ${list.join(", ")} 中的一位`,
   },
   en: {
     bodyIsNotObject: () => "Body is not a object",
@@ -14,9 +20,15 @@ export const message = {
     paramsIsError: (k: string) => `Param ${k} is error`,
     ignoreNeedParams: (k: string) => `Ignore param: ${k}`,
     typeError: (k: string, t: string) => `Param ${k} typeof need is ${t}`,
-    minError: (k: string, len: number) =>
+    minLengthError: (k: string, len: number) =>
       `Param ${k} length need not less than ${len}`,
-    maxError: (k: string, len: number) =>
+    maxLengthError: (k: string, len: number) =>
       `Param ${k} length need not longer than ${len}`,
+    minNumError: (k: string, len: number) =>
+      `Param ${k} length need not less than ${len}`,
+    maxNumError: (k: string, len: number) =>
+      `Param ${k} length need not more than ${len}`,
+    pickError: (k: string, list: any[]) =>
+      `Param ${k} is value need to be included in ${list.join(", ")} 中的一位`,
   },
 };

@@ -27,6 +27,6 @@ describe("check checkOf soke", () => {
       })({ dog: 50, fish: "the fish" }, "zh")
     );
 
-    expect(res).toMatch(/长度应不小于/);
+    expect(res).toMatch(/应不小于/);
   });
 });

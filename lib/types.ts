@@ -64,6 +64,8 @@ interface ISchema {
   cnPassport?: number | boolean;
   /** 正则校验对象是否为 银行卡 */
   bankCard?: number | boolean;
+  /** 校验是否为其中一个对象 */
+  pick?: any[];
 }
 
 export interface Soke {

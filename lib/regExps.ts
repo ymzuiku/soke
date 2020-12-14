@@ -1,12 +1,18 @@
 import { message, message as regExps } from "./message";
 
+export const pick = (list: any[]) => (v: string) => {
+  if (list.indexOf(v) === -1) {
+    return (k: string, lang: "zh" | "en") => regExps[lang].pickError(k, list);
+  }
+};
+
 export const minNum = (min: number) => (v: string) => {
   if (typeof v !== "number") {
     return (k: string, lang: "zh" | "en") =>
       regExps[lang].typeError(k, "string");
   }
   if (v < min) {
-    return (k: string, lang: "zh" | "en") => regExps[lang].minError(k, min);
+    return (k: string, lang: "zh" | "en") => regExps[lang].minNumError(k, min);
   }
 };
 
@@ -16,7 +22,7 @@ export const maxNum = (max: number) => (v: string) => {
       regExps[lang].typeError(k, "string");
   }
   if (v > max) {
-    return (k: string, lang: "zh" | "en") => regExps[lang].maxError(k, max);
+    return (k: string, lang: "zh" | "en") => regExps[lang].maxNumError(k, max);
   }
 };
 
@@ -26,7 +32,8 @@ export const minLength = (min: number) => (v: string) => {
       regExps[lang].typeError(k, "string");
   }
   if (v.length < min) {
-    return (k: string, lang: "zh" | "en") => regExps[lang].minError(k, min);
+    return (k: string, lang: "zh" | "en") =>
+      regExps[lang].minLengthError(k, min);
   }
 };
 
@@ -36,7 +43,8 @@ export const maxLength = (max: number) => (v: string) => {
       regExps[lang].typeError(k, "string");
   }
   if (v.length > max) {
-    return (k: string, lang: "zh" | "en") => regExps[lang].maxError(k, max);
+    return (k: string, lang: "zh" | "en") =>
+      regExps[lang].maxLengthError(k, max);
   }
 };
 /** 时间 */
