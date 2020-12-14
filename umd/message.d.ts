@@ -5,8 +5,11 @@ export declare const message: {
         paramsIsError: (k: string) => string;
         ignoreNeedParams: (k: string) => string;
         typeError: (k: string, t: string) => string;
-        minError: (k: string, len: number) => string;
-        maxError: (k: string, len: number) => string;
+        minLengthError: (k: string, len: number) => string;
+        maxLengthError: (k: string, len: number) => string;
+        minNumError: (k: string, len: number) => string;
+        maxNumError: (k: string, len: number) => string;
+        pickError: (k: string, list: any[]) => string;
     };
     en: {
         bodyIsNotObject: () => string;
@@ -14,7 +17,10 @@ export declare const message: {
         paramsIsError: (k: string) => string;
         ignoreNeedParams: (k: string) => string;
         typeError: (k: string, t: string) => string;
-        minError: (k: string, len: number) => string;
-        maxError: (k: string, len: number) => string;
+        minLengthError: (k: string, len: number) => string;
+        maxLengthError: (k: string, len: number) => string;
+        minNumError: (k: string, len: number) => string;
+        maxNumError: (k: string, len: number) => string;
+        pickError: (k: string, list: any[]) => string;
     };
 };

@@ -1,3 +1,4 @@
+export declare const pick: (list: any[]) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
 export declare const minNum: (min: number) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
 export declare const maxNum: (max: number) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
 export declare const minLength: (min: number) => (v: string) => ((k: string, lang: "zh" | "en") => string) | undefined;
