@@ -7,5 +7,6 @@ declare function soke<S extends Soke>(schema: S): (obj: any, lang?: "zh" | "en")
 };
 declare namespace soke {
     var baseLangaue: string;
+    var createSchema: <S extends Soke>(schema: S) => { [K in keyof S]: S[K]; };
 }
 export default soke;

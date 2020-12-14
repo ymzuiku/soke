@@ -130,5 +130,7 @@ function soke<S extends Soke>(
 }
 
 soke.baseLangaue = "en";
+soke.createSchema = <S extends Soke>(schema: S): { [K in keyof S]: S[K] } =>
+  schema as any;
 
 export default soke;
