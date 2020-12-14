@@ -1,7 +1,7 @@
 import soke from "../lib/index";
 import errorGet from "error-get";
 describe("check single soke", () => {
-  test("check min need string", async () => {
+  test("check min need a object", async () => {
     const res = await errorGet(() =>
       soke({
         dog: {
@@ -19,7 +19,7 @@ describe("check single soke", () => {
         dog: {
           max: 20,
           min: 10,
-          oneOf: ["fish"],
+          passOf: ["fish"],
         },
       })({ dog: 500 }, "zh")
     );
@@ -32,7 +32,7 @@ describe("check single soke", () => {
         dog: {
           max: 20,
           min: 10,
-          oneOf: ["fish"],
+          passOf: ["fish"],
         },
       })({ dog: "do" })
     );
@@ -45,7 +45,7 @@ describe("check single soke", () => {
         dog: {
           max: 20,
           min: 10,
-          oneOf: ["fish"],
+          passOf: ["fish"],
         },
       })({ dog: "20aaaaaaaaaaaaaaaaaaaaaaa" })
     );
@@ -78,14 +78,14 @@ describe("check single soke", () => {
     expect(res).toMatch(/缺少必要参数/);
   });
 
-  test("check ignore", async () => {
+  test("check pass", async () => {
     const res = await errorGet(() =>
       soke({
         dog: {
           max: 20,
           min: 10,
           type: "boolean",
-          ignore: 1,
+          pass: 1,
         },
       })({ fish: "20aaaaaaaaaaaa" })
     );

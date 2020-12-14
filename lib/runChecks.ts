@@ -3,12 +3,15 @@ import { message } from "./message";
 export function runChecks(fn: any, value: any, key: any, lang: "zh" | "en") {
   let error: any;
   const kind = Object.prototype.toString.call(fn);
+  // 计算 error
   if (kind === "[object Array]") {
     fn.forEach((v: any) => {
-      runChecks(v, value, key, lang);
+      const err = runChecks(v, value, key, lang);
+      if (err) {
+        error = err;
+      }
     });
-  }
-  if (kind === "[object RegExp]") {
+  } else if (kind === "[object RegExp]") {
     if (typeof value !== "string") {
       error = message[lang].typeError(key, "string");
     } else {
@@ -20,13 +23,14 @@ export function runChecks(fn: any, value: any, key: any, lang: "zh" | "en") {
       error = message[lang].paramsIsError(key);
     }
   }
+  // 检测 error
   if (typeof error === "function") {
     error = error(key, lang);
   }
   if (typeof error === "string") {
-    throw error;
+    return error;
   }
   if (error === false) {
-    throw message[lang].paramsIsError(key);
+    return message[lang].paramsIsError(key);
   }
 }

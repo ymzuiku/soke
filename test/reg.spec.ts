@@ -1,6 +1,6 @@
 import soke from "../lib/index";
 import errorGet from "error-get";
-describe("check group soke", () => {
+describe("check reg soke", () => {
   test("check password", async () => {
     const res = await errorGet(() =>
       soke({

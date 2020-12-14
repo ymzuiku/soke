@@ -5,7 +5,45 @@ import { Soke } from "./types";
 
 export { regExps, message };
 
-const ignores = { optional: 1, checks: 1, ignore: 1, oneOf: 1 } as any;
+const ignores = { optional: 1, checks: 1, pass: 1, oneOf: 1 } as any;
+
+function arrayOf(
+  schema: any,
+  obj: any,
+  fn: any,
+  key: string,
+  lang: "zh" | "en"
+) {
+  const value = obj[key];
+  let haveRight = false;
+  let error = "";
+
+  for (let i = 0; i < fn.length; i++) {
+    const _k = fn[i];
+    if (typeof _k === "string") {
+      if (schema[_k]) {
+        try {
+          soke({ [_k]: schema[_k] })({
+            [_k]: obj[_k],
+          });
+          haveRight = true;
+          break;
+        } catch (err) {
+          error = err;
+        }
+      }
+    } else {
+      const err = runChecks(_k, value, key, lang);
+      if (!err) {
+        haveRight = true;
+        break;
+      } else {
+        error = err;
+      }
+    }
+  }
+  return [haveRight, error];
+}
 
 function soke<S extends Soke>(
   schema: S
@@ -13,105 +51,78 @@ function soke<S extends Soke>(
   return (obj: any, lang: "zh" | "en" = "zh") => {
     const msg = message[lang];
 
-    const getError = () => {
-      if (!obj || typeof obj !== "object") {
-        return msg.bodyIsNotObject();
-      }
-      const list = Object.keys(schema);
-      for (let i = 0; i < list.length; i++) {
-        const key = list[i];
-        const value = (obj as any)[key];
-        const item = (schema as any)[key];
+    if (!obj || typeof obj !== "object") {
+      throw msg.bodyIsNotObject();
+    }
+    const list = Object.keys(schema);
+    for (let i = 0; i < list.length; i++) {
+      const key = list[i];
+      const value = (obj as any)[key];
+      const item = (schema as any)[key];
 
-        if (item.ignore) {
+      if (item.pass) {
+        continue;
+      }
+
+      if (item.checkOf) {
+        const [haveRight] = arrayOf(schema, obj, item.checkOf, key, lang);
+        if (!haveRight) {
+          if (item.message) {
+            throw item.message(key, value, lang);
+          }
+          throw msg.paramsIsError(key);
+        }
+      }
+
+      if (item.passOf) {
+        const [haveRight] = arrayOf(schema, obj, item.passOf, key, lang);
+        if (haveRight) {
           continue;
         }
-        if (item.oneOf) {
-          const oneOfKeys = item.oneOf as any[];
-          let haveRight = false;
-          for (let i = 0; i < oneOfKeys.length; i++) {
-            const _k = oneOfKeys[i];
-            if (typeof _k === "string") {
-              if (schema[_k]) {
-                try {
-                  soke({ [_k]: schema[_k] })({
-                    [_k]: obj[_k],
-                  });
-                  haveRight = true;
-                } catch (err) {
-                  // ignore oneOf
-                }
-              }
-              continue;
-            } else {
-              try {
-                runChecks(_k, value, key, lang);
-                haveRight = true;
-              } catch (err) {
-                // ignore oneOf
-              }
-            }
+      }
 
-            if (haveRight) {
-              break;
-            }
-          }
-
-          if (haveRight) {
-            continue;
-          }
+      if (value === void 0 || value === null || value === "") {
+        if (item.optional) {
+          continue;
         }
+        if (item.message) {
+          throw item.message(key, value, lang);
+        }
+        throw msg.ignoreNeedParams(key);
+      }
 
-        if (value === void 0 || value === null || value === "") {
-          if (item.optional) {
-            continue;
-          }
+      if (item.type && typeof value !== item.type) {
+        if (item.message) {
+          throw item.message(key, value, lang);
+        }
+        throw msg.typeError(key, item.type);
+      }
+      if (item.check) {
+        const error = runChecks(item.check, value, key, lang);
+        if (error) {
           if (item.message) {
-            return item.message(key, value, lang);
+            throw item.message(key, value, lang);
           }
-          return msg.ignoreNeedParams(key);
+          throw error;
         }
-
-        if (item.type && typeof value !== item.type) {
-          if (item.message) {
-            return item.message(key, value, lang);
-          }
-          return msg.typeError(key, item.type);
+      }
+      const keys = Object.keys(item);
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        if (ignores[k]) {
+          continue;
         }
-        if (item.checks) {
-          try {
-            runChecks(item.checks, value, key, lang);
-          } catch (error) {
+        const subFn = (regExps as any)[k];
+        if (subFn) {
+          const error = runChecks(subFn(item[k]), value, key, lang);
+          if (error) {
             if (item.message) {
-              return item.message(key, value, lang);
+              throw item.message(key, value, lang);
             }
-            return error;
-          }
-        }
-        const keys = Object.keys(item);
-        for (let i = 0; i < keys.length; i++) {
-          const k = keys[i];
-          if (ignores[k]) {
-            continue;
-          }
-          const subFn = (regExps as any)[k];
-          if (subFn) {
-            try {
-              runChecks(subFn(item[k]), value, key, lang);
-            } catch (error) {
-              if (item.message) {
-                return item.message(key, value, lang);
-              }
-              return error;
-            }
+            throw error;
           }
         }
       }
-    };
-
-    const error = getError();
-    if (error) {
-      throw error;
     }
 
     return obj;
