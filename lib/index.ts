@@ -45,6 +45,7 @@ function arrayOf(
   return [haveRight, error];
 }
 
+/** 入口函数 */
 function soke<S extends Soke>(
   schema: S
 ): (obj: any, lang?: "zh" | "en") => { [K in keyof S]: S[K] | any } {
