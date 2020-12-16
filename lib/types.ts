@@ -1,9 +1,13 @@
 interface ISchema {
-  /** 最小长度，并且必须为字符串 */
+  /* 最小长度，并且必须为字符串 */
   minLength?: number;
+  /** 最大长度，并且必须为字符串 */
   maxLength?: number;
+  /** 最小值，并且必须为number */
   minNum?: number;
+  /** 最大值，并且必须为number */
   maxNum?: number;
+  /** 若check不通过，覆盖错误描述 */
   message?: (key: string, value: string, lang: string) => string;
   /** 最大长度，并且必须为字符串 */
   /** 可以为空 */
@@ -11,7 +15,13 @@ interface ISchema {
   /** 忽略校验 */
   pass?: number | boolean;
   /** 类型校验 */
-  type?: "string" | "boolean" | "number";
+  type?:
+    | "string"
+    | "boolean"
+    | "number"
+    | "stringArray"
+    | "booleanArray"
+    | "numberArray";
   /** 使用正则、函数或组合进行多重校验 */
   check?: RegExp | ((v: string) => any) | (RegExp | ((v: string) => any))[];
   /** 使用其他对象、正则、函数，若其中一个校验通过，即忽略当前校验 */

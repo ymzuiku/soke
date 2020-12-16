@@ -91,11 +91,30 @@ function soke<S extends Soke>(
         throw msg.ignoreNeedParams(key);
       }
 
-      if (item.type && typeof value !== item.type) {
-        if (item.message) {
-          throw item.message(key, value, lang);
+      if (item.type) {
+        if (item.type.indexOf("Array") === -1) {
+          if (typeof value !== item.type) {
+            if (item.message) {
+              throw item.message(key, value, lang);
+            }
+            throw msg.typeError(key, item.type);
+          }
+        } else {
+          // 处理数组
+          const type = item.type.replace("Array", "");
+          if (Object.prototype.toString.call(value) !== "[object Array]") {
+            if (item.message) {
+              throw item.message(key, value, lang);
+            }
+            throw msg.typeError(key, item.type);
+          }
+          if (value[0] && typeof value[0] !== type) {
+            if (item.message) {
+              throw item.message(key, value[0], lang);
+            }
+            throw msg.typeError(key, item.type);
+          }
         }
-        throw msg.typeError(key, item.type);
       }
       if (item.check) {
         const error = runChecks(item.check, value, key, lang);

@@ -1,0 +1,299 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>soke</title>
+	<meta name="description" content="Documentation for soke">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">soke</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>soke</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#sock" id="sock" style="color: inherit; text-decoration: none;">
+					<h1>sock</h1>
+				</a>
+				<blockquote>
+					<p>轻量级快速校验数据</p>
+				</blockquote>
+				<ul>
+					<li>零依赖</li>
+					<li>支持组合校验、多选一校验、多参数交集校验</li>
+					<li>可自定义默认错误信息</li>
+					<li>支持多语言错误信息</li>
+					<li>错误均以 throw 方式抛出</li>
+					<li>支持 Typescript</li>
+				</ul>
+				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+					<h2>Install</h2>
+				</a>
+				<pre><code class="language-sh">$ npm install soke</code></pre>
+				<p>Use in javascript</p>
+				<pre><code class="language-js"><span class="hljs-keyword">import</span> soke <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;sock&quot;</span>;</code></pre>
+				<a href="#use" id="use" style="color: inherit; text-decoration: none;">
+					<h2>Use</h2>
+				</a>
+				<pre><code class="language-js"><span class="hljs-comment">// 设置默认语言</span>
+soke.baseLangaue = <span class="hljs-string">&quot;zh&quot;</span>; <span class="hljs-comment">// zh ｜ en, default: en</span>
+
+<span class="hljs-keyword">const</span> schema = soke({
+  <span class="hljs-attr">name</span>: {
+    <span class="hljs-attr">minLength</span>: <span class="hljs-number">4</span>,
+    <span class="hljs-attr">maxLength</span>: <span class="hljs-number">12</span>,
+    <span class="hljs-attr">check</span>: <span class="hljs-regexp">/Abc/</span>,
+  },
+  <span class="hljs-attr">age</span>: {
+    <span class="hljs-attr">minNum</span>: <span class="hljs-number">0</span>,
+    <span class="hljs-attr">maxNum</span>: <span class="hljs-number">100</span>,
+    <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  },
+  <span class="hljs-attr">phone</span>: {
+    <span class="hljs-attr">cnIphone</span>: <span class="hljs-number">1</span>,
+  },
+  <span class="hljs-attr">user</span>: {
+    <span class="hljs-attr">message</span>: <span class="hljs-function">(<span class="hljs-params">key, value</span>) =&gt;</span> <span class="hljs-string">`字段 <span class="hljs-subst">${key}</span> 错误`</span>,
+    <span class="hljs-attr">account</span>: [<span class="hljs-number">6</span>, <span class="hljs-number">20</span>],
+  },
+});
+<span class="hljs-keyword">const</span> values = schema({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Abcdefg&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">50</span>,
+  <span class="hljs-attr">phone</span>: <span class="hljs-string">&quot;13333333333&quot;</span>,
+  <span class="hljs-attr">user</span>: <span class="hljs-string">&quot;hello123&quot;</span>,
+});
+<span class="hljs-comment">// 返回数据 {name, age, phone}</span>
+
+<span class="hljs-keyword">const</span> values = schema({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Abcdefg&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">50</span>,
+  <span class="hljs-attr">phone</span>: <span class="hljs-string">&quot;50&quot;</span>,
+  <span class="hljs-attr">user</span>: <span class="hljs-string">&quot;hello&quot;</span>,
+});
+<span class="hljs-comment">// 抛出错误： throw 字段 phone 格式错误</span>
+
+<span class="hljs-keyword">const</span> values = schema(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Abcdefg&quot;</span>,
+    <span class="hljs-attr">age</span>: <span class="hljs-number">50</span>,
+    <span class="hljs-attr">phone</span>: <span class="hljs-string">&quot;50&quot;</span>,
+    <span class="hljs-attr">user</span>: <span class="hljs-string">&quot;hello&quot;</span>,
+  },
+  <span class="hljs-string">&quot;en&quot;</span> <span class="hljs-comment">// 使用英文错误提示</span>
+);
+<span class="hljs-comment">// 抛出错误： throw Param phone is error</span>
+
+<span class="hljs-keyword">const</span> values = schema({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Abcdefg&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">50</span>,
+  <span class="hljs-attr">phone</span>: <span class="hljs-string">&quot;13333333333&quot;</span>,
+  <span class="hljs-attr">user</span>: <span class="hljs-string">&quot;hello&quot;</span>,
+});
+<span class="hljs-comment">// 抛出错误：字段 user 错误</span></code></pre>
+				<a href="#服用-schema" id="服用-schema" style="color: inherit; text-decoration: none;">
+					<h2>服用 Schema</h2>
+				</a>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> schema = soke.createSchema({ <span class="hljs-attr">name</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;string&quot;</span> } });
+
+<span class="hljs-comment">// use</span>
+soke(schema)({ <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;hello&quot;</span> });</code></pre>
+				<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+					<h2>API</h2>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">interface</span> ISchema {
+  <span class="hljs-comment">/** 最小长度，并且必须为字符串 */</span>
+  minLength?: <span class="hljs-built_in">number</span>;
+  maxLength?: <span class="hljs-built_in">number</span>;
+  minNum?: <span class="hljs-built_in">number</span>;
+  maxNum?: <span class="hljs-built_in">number</span>;
+  message?: <span class="hljs-function">(<span class="hljs-params">key: <span class="hljs-built_in">string</span>, value: <span class="hljs-built_in">string</span>, lang: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">string</span>;
+  <span class="hljs-comment">/** 最大长度，并且必须为字符串 */</span>
+  <span class="hljs-comment">/** 可以为空 */</span>
+  optional?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 忽略校验 */</span>
+  pass?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 类型校验 */</span>
+  <span class="hljs-keyword">type</span>?:
+    | <span class="hljs-string">&quot;string&quot;</span>
+    | <span class="hljs-string">&quot;boolean&quot;</span>
+    | <span class="hljs-string">&quot;number&quot;</span>
+    | <span class="hljs-string">&quot;stringArray&quot;</span>
+    | <span class="hljs-string">&quot;booleanArray&quot;</span>
+    | <span class="hljs-string">&quot;numberArray&quot;</span>;
+  <span class="hljs-comment">/** 使用正则、函数或组合进行多重校验 */</span>
+  check?: <span class="hljs-built_in">RegExp</span> | (<span class="hljs-function">(<span class="hljs-params">v: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>) | (<span class="hljs-built_in">RegExp</span> | (<span class="hljs-function">(<span class="hljs-params">v: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>))[];
+  <span class="hljs-comment">/** 使用其他对象、正则、函数，若其中一个校验通过，即忽略当前校验 */</span>
+  passOf?: (<span class="hljs-built_in">string</span> | <span class="hljs-built_in">RegExp</span> | (<span class="hljs-function">(<span class="hljs-params">v: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>))[];
+  <span class="hljs-comment">/** 使用其他对象、正则、函数，必须其中一个校验通过 */</span>
+  checkOf?: (<span class="hljs-built_in">string</span> | <span class="hljs-built_in">RegExp</span> | (<span class="hljs-function">(<span class="hljs-params">v: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">any</span>))[];
+  <span class="hljs-comment">/** 正则校验对象是否为时间格式 */</span>
+  time?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为日期格式 */</span>
+  date?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为颜色 */</span>
+  hexColor?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 base64 */</span>
+  base64?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 email */</span>
+  email?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 html-tag */</span>
+  htmlTag?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 md5 */</span>
+  md5?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 qq */</span>
+  qq?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 非字母 */</span>
+  noLetter?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 字母 */</span>
+  letter?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 密码 */</span>
+  password?: [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>];
+  <span class="hljs-comment">/** 正则校验对象是否为 账户 */</span>
+  account?: [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>];
+  <span class="hljs-comment">/** 正则校验对象是否为 大陆座机 */</span>
+  cnTelPhone?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 大陆手机 */</span>
+  cnPhone?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 字母和数字 */</span>
+  azAZ09?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 大陆身份证，仅支持18位二代身份证 */</span>
+  cnIdCard?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 大陆企业机构代码证 */</span>
+  cnCompany?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 url */</span>
+  url?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 版本格式，如 1.0.0 */</span>
+  version?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 子网掩码 */</span>
+  subIp?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 大陆邮编 */</span>
+  cnPostalCode?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 大陆、香港、澳门护照 */</span>
+  cnPassport?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 正则校验对象是否为 银行卡 */</span>
+  bankCard?: <span class="hljs-built_in">number</span> | <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/** 校验是否为其中一个对象 */</span>
+  pick?: <span class="hljs-built_in">any</span>[];
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> Soke {
+  [key: <span class="hljs-built_in">string</span>]: ISchema;
+}</code></pre>
+				<a href="#test" id="test" style="color: inherit; text-decoration: none;">
+					<h2>Test</h2>
+				</a>
+				<p>Run test</p>
+				<pre><code class="language-sh">$ npm run test-s</code></pre>
+				<pre><code class="language-sh">Test Suites
+8 passed, 8 total
+
+Tests
+41 passed, 41 total</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_message_.html">&quot;message&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_regexps_.html">&quot;reg<wbr>Exps&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_runchecks_.html">&quot;run<wbr>Checks&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_types_.html">&quot;types&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

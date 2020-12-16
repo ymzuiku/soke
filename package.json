@@ -9,6 +9,7 @@
     "test": "jest --watchAll --detectOpenHandles",
     "test-c": "jest --coverage",
     "test-s": "jest --testResultsProcessor=jest-stare",
+    "doc": "typedoc --out doc lib",
     "lib": "node rollup.config.js"
   },
   "devDependencies": {
@@ -21,6 +22,8 @@
     "rollup": "^1.24.0",
     "rollup-plugin-typescript2": "^0.24.3",
     "rollup-plugin-uglify": "^6.0.3",
+    "typedoc": "^0.19.2",
+    "error-get": "^1.0.1",
     "typescript": "3.9.6"
   },
   "repository": {
@@ -32,6 +35,6 @@
   },
   "homepage": "git+https://github.com/ymzuiku/soke.git",
   "dependencies": {
-    "error-get": "^1.0.1"
+    
   }
 }
