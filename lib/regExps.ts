@@ -72,15 +72,17 @@ export const noLetter = () => /^[^A-Za-z]*$/;
 /** 仅包含字母 */
 export const letter = () => /^[a-zA-Z]+$/;
 /** 密码 */
-export const password = (nums: number[]) => {
+export const string = (nums: number[]) => {
   const [min = 6, max = 30] = nums;
-  return new RegExp(`^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{${min},${max}}$`);
+  return new RegExp(
+    `^(?![0-9]+$)(?![a-zA-Z]+$)[,.!@#$%0-9A-Za-z]{${min},${max}}$`
+  );
 };
 
 /** 账号 */
-export const account = (nums: number[]) => {
+export const labels = (nums: number[]) => {
   const [min = 6, max = 30] = nums;
-  return new RegExp(`^[a-zA-Z]\\w{${min},${max}}$`);
+  return new RegExp(`^[,.!@#$%a-zA-Z0-9_-]{${min},${max}}$`);
 };
 
 /** 国内座机 */

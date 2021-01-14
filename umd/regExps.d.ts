@@ -24,9 +24,9 @@ export declare const noLetter: () => RegExp;
 /** 仅包含字母 */
 export declare const letter: () => RegExp;
 /** 密码 */
-export declare const password: (nums: number[]) => RegExp;
+export declare const string: (nums: number[]) => RegExp;
 /** 账号 */
-export declare const account: (nums: number[]) => RegExp;
+export declare const labels: (nums: number[]) => RegExp;
 /** 国内座机 */
 export declare const cnTelPhone: () => RegExp;
 /** 国内手机 */
