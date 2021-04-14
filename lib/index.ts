@@ -82,6 +82,13 @@ function soke<S extends Soke>(
     if (!obj) {
       throw msg.bodyIsNotObject();
     }
+    if (typeof obj !== "object") {
+      try {
+        obj = JSON.parse(obj);
+      } catch (err) {
+        throw msg.bodyIsNotObject();
+      }
+    }
     const list = Object.keys(schema);
     for (let i = 0; i < list.length; i++) {
       const key = list[i];
