@@ -79,7 +79,7 @@ function soke<S extends Soke>(
   return (obj: any, lang: "zh" | "en" = soke.baseLangaue as any) => {
     const msg = message[lang];
 
-    if (!obj || typeof obj !== "object") {
+    if (!obj) {
       throw msg.bodyIsNotObject();
     }
     const list = Object.keys(schema);
