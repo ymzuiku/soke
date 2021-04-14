@@ -82,7 +82,7 @@ const values = schema({
 // 抛出错误：字段 user 错误
 ```
 
-## 服用 Schema
+## 复用 Schema
 
 ```js
 const schema = soke.createSchema({ name: { type: "string" } });
