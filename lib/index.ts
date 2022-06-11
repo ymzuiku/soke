@@ -65,8 +65,24 @@ export interface SchemaItem {
   date: (e?: string) => SchemaItem;
 }
 
+export function SokeSchema(schema: Record<string, SchemaItem>) {
+  return {
+    isSoke: true,
+    schema,
+    validate: (value: Record<string, unknown>, key?: string) => {
+      return validateSoke(schema, value, key);
+    },
+    firstError: (errors: Record<string, string>) => {
+      return firstError(schema, errors);
+    },
+    throwFirstError: (errors: Record<string, string>) => {
+      return throwFirstError(schema, errors);
+    },
+  };
+}
+
 function makeVali(defType: Types, defErr?: string): SchemaItem {
-  const __tiny = {
+  const __soke = {
     type: defType,
     errors: {
       type: defErr || "Need type is: " + defType,
@@ -76,52 +92,52 @@ function makeVali(defType: Types, defErr?: string): SchemaItem {
   } as any as ValidateValue;
 
   const out = {
-    __tiny,
+    __soke,
     required: (e?: string) => {
-      out.__tiny.errors.required = e || defErr || "Need required";
-      out.__tiny.requred = true;
+      out.__soke.errors.required = e || defErr || "Need required";
+      out.__soke.requred = true;
       return out;
     },
     matches: (reg: RegExp, e?: string) => {
-      out.__tiny.errors.matches.push(
+      out.__soke.errors.matches.push(
         e || defErr || "Matches error: " + String(reg)
       );
-      out.__tiny.matches.push(reg);
+      out.__soke.matches.push(reg);
       return out;
     },
     len: (len: number, e?: string) => {
-      out.__tiny.errors.len = e || defErr || "Length no equal: " + len;
-      out.__tiny.len = len;
+      out.__soke.errors.len = e || defErr || "Length no equal: " + len;
+      out.__soke.len = len;
       return out;
     },
     equal: (val: any, e?: string) => {
-      out.__tiny.errors.equal = e || defErr || "Not equal the val";
-      out.__tiny.equal = val;
+      out.__soke.errors.equal = e || defErr || "Not equal the val";
+      out.__soke.equal = val;
       return out;
     },
     equalByKey: (key: string, e?: string) => {
-      out.__tiny.errors.equalByKey = e || defErr || "Not equal by: " + key;
-      out.__tiny.equalByKey = key;
+      out.__soke.errors.equalByKey = e || defErr || "Not equal by: " + key;
+      out.__soke.equalByKey = key;
       return out;
     },
     min: (min: number, e?: string) => {
-      out.__tiny.errors.min = e || defErr || "Need min: " + min;
-      out.__tiny.min = min;
+      out.__soke.errors.min = e || defErr || "Need min: " + min;
+      out.__soke.min = min;
       return out;
     },
     max: (max: number, e?: string) => {
-      out.__tiny.errors.max = e || defErr || "Need max: " + max;
-      out.__tiny.max = max;
+      out.__soke.errors.max = e || defErr || "Need max: " + max;
+      out.__soke.max = max;
       return out;
     },
     pick: (list: Array<string>, e?: string) => {
-      out.__tiny.errors.pick = e || defErr || "Need in list: " + list;
-      out.__tiny.pick = new Set(list);
+      out.__soke.errors.pick = e || defErr || "Need in list: " + list;
+      out.__soke.pick = new Set(list);
       return out;
     },
     notPick: (list: Array<string>, e?: string) => {
-      out.__tiny.errors.notPick = e || defErr || "Need not in list: " + list;
-      out.__tiny.notPick = new Set(list);
+      out.__soke.errors.notPick = e || defErr || "Need not in list: " + list;
+      out.__soke.notPick = new Set(list);
       return out;
     },
     password: (e?: string) => {
@@ -283,7 +299,7 @@ const rights = {
   },
 };
 
-export function validateSoke(
+function validateSoke(
   schema: Record<string, SchemaItem>,
   values: Record<string, any>,
   key?: string
@@ -293,7 +309,7 @@ export function validateSoke(
     if (!schema[key]) {
       return "";
     }
-    const item = (schema[key] as any).__tiny as ValidateValue;
+    const item = (schema[key] as any).__soke as ValidateValue;
     const value = values[key];
     if (value !== undefined && !rights.type(value, item.type)) {
       return item.errors.type;
@@ -346,7 +362,7 @@ export function validateSoke(
   return errors;
 }
 
-export function firstError(
+function firstError(
   schema: Record<string, SchemaItem>,
   errors: Record<string, string>
 ) {
@@ -362,7 +378,7 @@ export function firstError(
   return err;
 }
 
-export function throwFirstError(
+function throwFirstError(
   schema: Record<string, SchemaItem>,
   errors: Record<string, string>
 ) {

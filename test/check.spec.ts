@@ -1,8 +1,8 @@
-import { firstError, soke, throwFirstError, validateSoke } from "../lib/index";
+import { soke, SokeSchema } from "../lib/index";
 
 describe("check soke", () => {
   test("check fn error", async () => {
-    const schema = {
+    const schema = SokeSchema({
       name: soke.string().min(2, "to min").max(10, "to max"),
       email: soke.string().email("need a email"),
       phone: soke
@@ -19,8 +19,8 @@ describe("check soke", () => {
         .string("password again need equal to password")
         .required()
         .equalByKey("password"),
-    };
-    const errors = validateSoke(schema, {
+    });
+    const errors = schema.validate({
       name: "a",
       phone: "133",
       code: "11",
@@ -37,11 +37,11 @@ describe("check soke", () => {
       password: "password is too weak",
       passwordAgain: "password again need equal to password",
     });
-    const err = firstError(schema, errors);
+    const err = schema.firstError(errors);
     expect(err).toEqual("to min");
   });
   test("check in key", async () => {
-    const schema = {
+    const schema = SokeSchema({
       phone: soke
         .string()
         .required("need input phone")
@@ -56,9 +56,8 @@ describe("check soke", () => {
         .string("password again need equal to password")
         .required()
         .equalByKey("password"),
-    };
-    const errors = validateSoke(
-      schema,
+    });
+    const errors = schema.validate(
       {
         phone: "133",
         code: "11",
@@ -71,11 +70,11 @@ describe("check soke", () => {
       password: "password is too weak",
     });
 
-    const err = firstError(schema, errors);
+    const err = schema.firstError(errors);
     expect(err).toEqual("password is too weak");
 
     try {
-      throwFirstError(schema, errors);
+      schema.throwFirstError(errors);
     } catch (err) {
       expect(err).toEqual(Error("password is too weak"));
     }

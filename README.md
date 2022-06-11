@@ -24,27 +24,27 @@ import soke from "sock";
 
 ```js
 // 创建一个草稿
-const schema = {
-  name: soke.string().min(2, "to min").max(10, "to max"),
-  email: soke.string().email("need a email"),
-  phone: soke
-    .string()
-    .required("need input phone")
-    .chinaPhone("phone formart error"),
-  code: soke.string("need input code").required().matches(/^\d+$/).len(6),
-  agree: soke.bool().required("need click agree"),
-  password: soke
-    .string()
-    .required("need input password")
-    .passwordStrong("password is too weak"),
-  passwordAgain: soke
-    .string("password again need equal to password")
-    .required()
-    .equalByKey("password"),
-};
+const schema = SokeSchema({
+name: soke.string().min(2, "to min").max(10, "to max"),
+email: soke.string().email("need a email"),
+phone: soke
+  .string()
+  .required("need input phone")
+  .chinaPhone("phone formart error"),
+code: soke.string("need input code").required().matches(/^\d+$/).len(6),
+agree: soke.bool().required("need click agree"),
+password: soke
+  .string()
+  .required("need input password")
+  .passwordStrong("password is too weak"),
+passwordAgain: soke
+  .string("password again need equal to password")
+  .required()
+  .equalByKey("password"),
+});
 
 // 使用草稿去校验一个对象，得到一个错误对象
-const errors = validateSoke(schema, {
+const errors = schema.validate({
   name: "a",
   phone: "133",
   code: "11",
@@ -64,12 +64,12 @@ expect(errors).toEqual({
 });
 
 // 获取错误对象中，以草稿声明顺序的第一个错误字符串
-const err = firstError(schema, errors);
-expect(err).toEqual("password is too weak");
+const err = schema.firstError(errors);
+expect(err).toEqual("to min");
 
 // 或者抛出错误对象中的第一个错误
 try {
-  throwFirstError(schema, errors);
+  schema.throwFirstError(errors);
 } catch (err) {
   expect(err).toEqual(Error("password is too weak"));
 }
