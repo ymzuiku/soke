@@ -28,10 +28,10 @@ type ValidateValue = {
 export type ValidateSchema = Record<string, SchemaItem>;
 
 export const soke = {
+  object: sokeSchema,
   string: (e?: string) => makeVali("string", e),
   array: (e?: string) => makeVali("array", e),
   bool: (e?: string) => makeVali("boolean", e),
-  object: (e?: string) => makeVali("object", e),
   number: (e?: string) => makeVali("number", e),
 };
 
@@ -65,7 +65,7 @@ export interface SchemaItem {
   date: (e?: string) => SchemaItem;
 }
 
-export function SokeSchema(schema: Record<string, SchemaItem>) {
+function sokeSchema(schema: Record<string, SchemaItem>) {
   return {
     isSoke: true,
     schema,

@@ -1,8 +1,8 @@
-import { soke, SokeSchema } from "../lib/index";
+import { soke } from "../lib/index";
 
 describe("check soke", () => {
   test("check fn error", async () => {
-    const schema = SokeSchema({
+    const schema = soke.object({
       name: soke.string().min(2, "to min").max(10, "to max"),
       email: soke.string().email("need a email"),
       phone: soke
@@ -41,7 +41,7 @@ describe("check soke", () => {
     expect(err).toEqual("to min");
   });
   test("check in key", async () => {
-    const schema = SokeSchema({
+    const schema = soke.object({
       phone: soke
         .string()
         .required("need input phone")

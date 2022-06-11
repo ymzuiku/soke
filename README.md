@@ -17,14 +17,14 @@ $ npm install soke
 Use in Javascript / Typescript
 
 ```js
-import soke from "sock";
+import { soke } from "sock";
 ```
 
 ## Use
 
 ```js
 // 创建一个草稿
-const schema = SokeSchema({
+const schema = soke.object({
 name: soke.string().min(2, "to min").max(10, "to max"),
 email: soke.string().email("need a email"),
 phone: soke
