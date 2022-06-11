@@ -249,10 +249,10 @@ const rights = {
       return true;
     }
     if (typeof value === "number") {
-      return value > min;
+      return value >= min;
     }
     if (value && value.length) {
-      return value.length > min;
+      return value.length >= min;
     }
     return false;
   },
@@ -275,25 +275,41 @@ const rights = {
     if (!value) {
       return false;
     }
-    if (Array.isArray(value) && value.find((v) => !pick.has(v))) {
-      return false;
+    if (Array.isArray(value)) {
+      let out = true;
+      for (let i = 0; i < value.length; i++) {
+        const v = value[i];
+        if (!pick.has(v)) {
+          out = false;
+          break;
+        }
+      }
+      return out;
     }
     if (!pick.has(value)) {
       return false;
     }
     return true;
   },
-  notPick: (value: any, noPick?: Set<string>) => {
-    if (noPick === undefined) {
+  notPick: (value: any, notPick?: Set<string>) => {
+    if (notPick === undefined) {
       return true;
     }
     if (!value) {
       return false;
     }
-    if (Array.isArray(value) && value.find((v) => noPick.has(v))) {
-      return false;
+    if (Array.isArray(value)) {
+      let out = true;
+      for (let i = 0; i < value.length; i++) {
+        const v = value[i];
+        if (notPick.has(v)) {
+          out = false;
+          break;
+        }
+      }
+      return out;
     }
-    if (noPick.has(value)) {
+    if (notPick.has(value)) {
       return false;
     }
     return true;

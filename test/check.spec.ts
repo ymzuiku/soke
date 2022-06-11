@@ -79,4 +79,46 @@ describe("check soke", () => {
       expect(err).toEqual(Error("password is too weak"));
     }
   });
+  test("check array", async () => {
+    const schema = soke.object({
+      anime: soke
+        .array("type need a array")
+        .required("need input phone")
+        .min(2, "to min")
+        .pick(["dog", "fish", "cat"], "pick warn"),
+    });
+    {
+      const errors = schema.validate({
+        anime: "dog",
+      });
+      expect(errors).toEqual({
+        anime: "type need a array",
+      });
+    }
+    {
+      const errors = schema.validate({
+        anime: ["cat"],
+      });
+      expect(errors).toEqual({
+        anime: "to min",
+      });
+    }
+    {
+      const errors = schema.validate({
+        anime: ["cat", "fish2"],
+      });
+      expect(errors).toEqual({
+        anime: "pick warn",
+      });
+    }
+    {
+      const errors = schema.validate({
+        anime: ["cat", "fish"],
+      });
+      expect(errors).toEqual({
+        anime: "",
+      });
+      // throw "aa";
+    }
+  });
 });
