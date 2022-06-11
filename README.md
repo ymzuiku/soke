@@ -4,9 +4,8 @@
 
 - 零依赖
 - 支持组合校验、多选一校验、多参数交集校验
-- 可自定义默认错误信息
-- 支持多语言错误信息
-- 错误均以 throw 方式抛出
+- 为每个校验自定定义错误
+- 正则可以组合使用
 - 支持 Typescript
 
 ## Install
@@ -15,7 +14,7 @@
 $ npm install soke
 ```
 
-Use in javascript
+Use in Javascript / Typescript
 
 ```js
 import soke from "sock";
@@ -24,156 +23,58 @@ import soke from "sock";
 ## Use
 
 ```js
-// 设置默认语言
-soke.baseLangaue = "zh"; // zh ｜ en, default: en
+// 创建一个草稿
+const schema = {
+  name: soke.string().min(2, "to min").max(10, "to max"),
+  email: soke.string().email("need a email"),
+  phone: soke
+    .string()
+    .required("need input phone")
+    .chinaPhone("phone formart error"),
+  code: soke.string("need input code").required().matches(/^\d+$/).len(6),
+  agree: soke.bool().required("need click agree"),
+  password: soke
+    .string()
+    .required("need input password")
+    .passwordStrong("password is too weak"),
+  passwordAgain: soke
+    .string("password again need equal to password")
+    .required()
+    .equalByKey("password"),
+};
 
-const schema = soke({
-  name: {
-    minLength: 4,
-    maxLength: 12,
-    check: /Abc/,
-  },
-  age: {
-    minNum: 0,
-    maxNum: 100,
-    type: "number",
-  },
-  phone: {
-    cnIphone: 1,
-  },
-  user: {
-    message: (key, value) => `字段 ${key} 错误`,
-    account: [6, 20],
-  },
+// 使用草稿去校验一个对象，得到一个错误对象
+const errors = validateSoke(schema, {
+  name: "a",
+  phone: "133",
+  code: "11",
+  password: "123",
+  passwordAgain: "456",
 });
-const values = schema({
-  name: "Abcdefg",
-  age: 50,
-  phone: "13333333333",
-  user: "hello123",
+
+// 错误对象是所有的错误集合
+expect(errors).toEqual({
+  name: "to min",
+  email: "need a email",
+  phone: "phone formart error",
+  code: "need input code",
+  agree: "need click agree",
+  password: "password is too weak",
+  passwordAgain: "password again need equal to password",
 });
-// 返回数据 {name, age, phone}
 
-const values = schema({
-  name: "Abcdefg",
-  age: 50,
-  phone: "50",
-  user: "hello",
-});
-// 抛出错误： throw 字段 phone 格式错误
+// 获取错误对象中，以草稿声明顺序的第一个错误字符串
+const err = firstError(schema, errors);
+expect(err).toEqual("password is too weak");
 
-const values = schema(
-  {
-    name: "Abcdefg",
-    age: 50,
-    phone: "50",
-    user: "hello",
-  },
-  "en" // 使用英文错误提示
-);
-// 抛出错误： throw Param phone is error
-
-const values = schema({
-  name: "Abcdefg",
-  age: 50,
-  phone: "13333333333",
-  user: "hello",
-});
-// 抛出错误：字段 user 错误
-```
-
-## 复用 Schema
-
-```js
-const schema = soke.createSchema({ name: { type: "string" } });
-
-// use
-soke(schema)({ name: "hello" });
-```
-
-## API
-
-```ts
-interface ISchema {
-  /** 最小长度，并且必须为字符串 */
-  minLength?: number;
-  maxLength?: number;
-  minNum?: number;
-  maxNum?: number;
-  message?: (key: string, value: string, lang: string) => string;
-  /** 最大长度，并且必须为字符串 */
-  /** 可以为空 */
-  optional?: number | boolean;
-  /** 忽略校验 */
-  pass?: number | boolean;
-  /** 类型校验 */
-  type?:
-    | "string"
-    | "boolean"
-    | "number"
-    | "stringArray"
-    | "booleanArray"
-    | "numberArray";
-  /** 使用正则、函数或组合进行多重校验 */
-  check?: RegExp | ((v: string) => any) | (RegExp | ((v: string) => any))[];
-  /** 使用其他对象、正则、函数，若其中一个校验通过，即忽略当前校验 */
-  passOf?: (string | RegExp | ((v: string) => any))[];
-  /** 使用其他对象、正则、函数，必须其中一个校验通过 */
-  checkOf?: (string | RegExp | ((v: string) => any))[];
-  /** 正则校验对象是否为时间格式 */
-  time?: number | boolean;
-  /** 正则校验对象是否为日期格式 */
-  date?: number | boolean;
-  /** 正则校验对象是否为颜色 */
-  hexColor?: number | boolean;
-  /** 正则校验对象是否为 base64 */
-  base64?: number | boolean;
-  /** 正则校验对象是否为 email */
-  email?: number | boolean;
-  /** 正则校验对象是否为 html-tag */
-  htmlTag?: number | boolean;
-  /** 正则校验对象是否为 md5 */
-  md5?: number | boolean;
-  /** 正则校验对象是否为 qq */
-  qq?: number | boolean;
-  /** 正则校验对象是否为 非字母 */
-  noLetter?: number | boolean;
-  /** 正则校验对象是否为 字母 */
-  letter?: number | boolean;
-  /** 正则校验对象是否为 密码 */
-  password?: [number, number];
-  /** 正则校验对象是否为 账户 */
-  account?: [number, number];
-  /** 正则校验对象是否为 大陆座机 */
-  cnTelPhone?: number | boolean;
-  /** 正则校验对象是否为 大陆手机 */
-  cnPhone?: number | boolean;
-  /** 正则校验对象是否为 字母和数字 */
-  azAZ09?: number | boolean;
-  /** 正则校验对象是否为 大陆身份证，仅支持18位二代身份证 */
-  cnIdCard?: number | boolean;
-  /** 正则校验对象是否为 大陆企业机构代码证 */
-  cnCompany?: number | boolean;
-  /** 正则校验对象是否为 url */
-  url?: number | boolean;
-  /** 正则校验对象是否为 版本格式，如 1.0.0 */
-  version?: number | boolean;
-  /** 正则校验对象是否为 子网掩码 */
-  subIp?: number | boolean;
-  /** 正则校验对象是否为 大陆邮编 */
-  cnPostalCode?: number | boolean;
-  /** 正则校验对象是否为 大陆、香港、澳门护照 */
-  cnPassport?: number | boolean;
-  /** 正则校验对象是否为 银行卡 */
-  bankCard?: number | boolean;
-  /** 校验是否为其中一个对象 */
-  pick?: any[];
-}
-
-export interface Soke {
-  [key: string]: ISchema;
+// 或者抛出错误对象中的第一个错误
+try {
+  throwFirstError(schema, errors);
+} catch (err) {
+  expect(err).toEqual(Error("password is too weak"));
 }
 ```
+
 
 ## Test
 
