@@ -69,6 +69,7 @@ export function SokeSchema(schema: Record<string, SchemaItem>) {
   return {
     isSoke: true,
     schema,
+    schemaKeys: Object.keys(schema),
     validate: (value: Record<string, unknown>, key?: string) => {
       return validateSoke(schema, value, key);
     },
