@@ -271,10 +271,10 @@ const rights = {
       return true;
     }
     if (typeof value === "number") {
-      return value < max;
+      return value <= max;
     }
     if (value && value.length) {
-      return value.length < max;
+      return value.length <= max;
     }
     return false;
   },

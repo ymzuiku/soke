@@ -176,4 +176,56 @@ describe("check soke", () => {
 
     expect(v2).toEqual(value);
   });
+
+  test("check min max", async () => {
+    const schema = soke.object({
+      name: soke.string().min(2, "to min").max(4, "to max"),
+      age: soke.number("need number").min(4, "to min").max(6, "to max"),
+    });
+
+    {
+      const errors = schema.validate({
+        name: "a",
+        age: 100,
+      });
+
+      expect(errors).toEqual({
+        name: "to min",
+        age: "to max",
+      });
+    }
+    {
+      const errors = schema.validate({
+        name: "aa",
+        age: 4,
+      });
+
+      expect(errors).toEqual({
+        name: "",
+        age: "",
+      });
+    }
+    {
+      const errors = schema.validate({
+        name: "aaaa",
+        age: 6,
+      });
+
+      expect(errors).toEqual({
+        name: "",
+        age: "",
+      });
+    }
+    {
+      const errors = schema.validate({
+        name: "aaaaa",
+        age: 7,
+      });
+
+      expect(errors).toEqual({
+        name: "to max",
+        age: "to max",
+      });
+    }
+  });
 });
