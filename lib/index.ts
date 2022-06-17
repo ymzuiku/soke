@@ -73,6 +73,16 @@ function sokeSchema(schema: Record<string, SchemaItem>) {
     validate: (value: Record<string, unknown>, key?: string) => {
       return validateSoke(schema, value, key);
     },
+    dto: <T extends Record<string, unknown>>(value: T): T => {
+      const errors = validateSoke(schema, value, undefined, true);
+      throwFirstError(schema, errors);
+      Object.keys(value).forEach((k) => {
+        if (!schema[k]) {
+          delete value[k];
+        }
+      });
+      return value;
+    },
     firstError: (errors: Record<string, string>) => {
       return firstError(schema, errors);
     },
@@ -319,7 +329,8 @@ const rights = {
 function validateSoke(
   schema: Record<string, SchemaItem>,
   values: Record<string, any>,
-  key?: string
+  key?: string,
+  first?: boolean
 ): Record<string, string> {
   const errors: any = {};
   const checkKey = (key: string) => {
@@ -373,6 +384,9 @@ function validateSoke(
       const key = list[i];
       const err = checkKey(key);
       errors[key] = err;
+      if (err && first) {
+        break;
+      }
     }
   }
 

@@ -121,4 +121,59 @@ describe("check soke", () => {
       // throw "aa";
     }
   });
+  test("check fn dto", async () => {
+    const schema = soke.object({
+      name: soke.string().min(2, "to min").max(10, "to max"),
+      email: soke.string().email("need a email"),
+      phone: soke
+        .string()
+        .required("need input phone")
+        .chinaPhone("phone formart error"),
+      code: soke.string("need input code").required().matches(/^\d+$/).len(6),
+      agree: soke.bool().required("need click agree"),
+      password: soke
+        .string()
+        .required("need input password")
+        .passwordStrong("password is too weak"),
+      passwordAgain: soke
+        .string("password again need equal to password")
+        .required()
+        .equalByKey("password"),
+    });
+
+    try {
+      const errors = schema.dto({
+        name: "a",
+        phone: "133",
+        code: "11",
+        password: "123",
+        passwordAgain: "456",
+      });
+    } catch (err) {
+      expect(err).toEqual(new Error("to min"));
+    }
+
+    const value = {
+      name: "aaa",
+      phone: "13333333333",
+      email: "mail@qqq.com",
+      code: "666666",
+      password: "123123Qwe",
+      passwordAgain: "123123Qwe",
+      agree: true,
+      cat: "123123Qwe",
+    };
+    let v2 = schema.dto(value);
+    expect(value).toEqual({
+      name: "aaa",
+      phone: "13333333333",
+      email: "mail@qqq.com",
+      code: "666666",
+      password: "123123Qwe",
+      passwordAgain: "123123Qwe",
+      agree: true,
+    });
+
+    expect(v2).toEqual(value);
+  });
 });
