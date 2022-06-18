@@ -39,6 +39,7 @@ describe("check soke", () => {
     });
     expect(errors.error).toEqual("to min");
   });
+
   test("check in key", async () => {
     const schema = soke.object({
       phone: soke
@@ -70,6 +71,8 @@ describe("check soke", () => {
     expect(errors.errors).toEqual({
       password: "password is too weak",
     });
+    expect(errors.error).toEqual("password is too weak");
+    expect(errors.path).toEqual("password");
 
     try {
       schema.isValid(

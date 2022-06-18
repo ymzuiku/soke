@@ -73,6 +73,8 @@ export function validate(
   };
   if (key) {
     errors[key] = checkKey(key);
+    error = checkKey(key)!;
+    path = key;
   } else {
     const list = Object.keys(schema);
     for (let i = 0; i < list.length; i++) {
