@@ -1,6 +1,6 @@
 {
   "name": "soke",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "main": "umd/index.js",
   "types": "lib/index.ts",
   "exports": {
@@ -14,7 +14,7 @@
     "test-c": "jest --coverage",
     "test-s": "jest --testResultsProcessor=jest-stare",
     "doc": "typedoc --out doc lib",
-    "esm": "esbuild --define:process.env.NODE_ENV=\\\"production\\\" lib/index.ts --outdir=esm --target=es6  --bundle  --external:react --external:react-ob2 --format=esm --minify --splitting",
+    "esm": "esbuild --define:process.env.NODE_ENV=\\\"production\\\" lib/index.ts --outdir=esm --target=es6  --bundle  --external:react --external:react-ob --format=esm --minify --splitting",
     "cjs": "esbuild --define:process.env.NODE_ENV=\\\"production\\\" lib/index.ts --outdir=cjs --target=es6  --bundle  --external:react --external:react-ob --format=cjs --minify",
     "build": "yarn esm && yarn cjs"
   },

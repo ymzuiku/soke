@@ -65,7 +65,17 @@ export interface SchemaItem {
   date: (e?: string) => SchemaItem;
 }
 
-function sokeSchema(schema: Record<string, SchemaItem>) {
+export interface Soke {
+  isSoke: boolean;
+  schema: Record<string, SchemaItem>;
+  schemaKeys: string[];
+  validate: (value: any, key?: string) => Record<string, string>;
+  dto: <T>(value: T) => T;
+  firstError: (errors: Record<string, string>) => string | undefined;
+  throwFirstError: (errors: Record<string, string>) => void;
+}
+
+function sokeSchema(schema: Record<string, SchemaItem>): Soke {
   return {
     isSoke: true,
     schema,
@@ -73,12 +83,12 @@ function sokeSchema(schema: Record<string, SchemaItem>) {
     validate: (value: Record<string, unknown>, key?: string) => {
       return validateSoke(schema, value, key);
     },
-    dto: <T extends Record<string, unknown>>(value: T): T => {
+    dto: <T>(value: T): T => {
       const errors = validateSoke(schema, value, undefined, true);
       throwFirstError(schema, errors);
       Object.keys(value).forEach((k) => {
         if (!schema[k]) {
-          delete value[k];
+          delete (value as any)[k];
         }
       });
       return value;
