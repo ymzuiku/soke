@@ -349,10 +349,10 @@ function validateSoke(
     }
     const item = (schema[key] as any).__soke as ValidateValue;
     const value = values[key];
-    if (value !== undefined && !rights.type(value, item.type)) {
+    if (value !== void 0 && !rights.type(value, item.type)) {
       return item.errors.type;
     }
-    if (item.requred && !value) {
+    if (item.requred && !value && typeof value !== "number") {
       return item.errors.required;
     }
     if (!rights.min(value, item.min)) {

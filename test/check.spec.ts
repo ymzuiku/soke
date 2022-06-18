@@ -228,4 +228,32 @@ describe("check soke", () => {
       });
     }
   });
+  test("check number", async () => {
+    const schema = soke.object({
+      age: soke
+        .number("need number")
+        .required("need input age")
+        .min(4, "to min")
+        .max(60, "to max"),
+    });
+
+    {
+      const errors = schema.validate({
+        age: "20",
+      });
+
+      expect(errors).toEqual({
+        age: "need number",
+      });
+    }
+    {
+      const errors = schema.validate({
+        age: 0,
+      });
+
+      expect(errors).toEqual({
+        age: "to min",
+      });
+    }
+  });
 });
