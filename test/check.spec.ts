@@ -28,7 +28,7 @@ describe("check soke", () => {
       passwordAgain: "456",
     });
 
-    expect(errors).toEqual({
+    expect(errors.errors).toEqual({
       name: "to min",
       email: "need a email",
       phone: "phone formart error",
@@ -37,8 +37,7 @@ describe("check soke", () => {
       password: "password is too weak",
       passwordAgain: "password again need equal to password",
     });
-    const err = schema.firstError(errors);
-    expect(err).toEqual("to min");
+    expect(errors.error).toEqual("to min");
   });
   test("check in key", async () => {
     const schema = soke.object({
@@ -64,17 +63,24 @@ describe("check soke", () => {
         password: "123",
         passwordAgain: "456",
       },
-      "password"
+      {
+        key: "password",
+      }
     );
-    expect(errors).toEqual({
+    expect(errors.errors).toEqual({
       password: "password is too weak",
     });
 
-    const err = schema.firstError(errors);
-    expect(err).toEqual("password is too weak");
-
     try {
-      schema.throwFirstError(errors);
+      schema.isValid(
+        {
+          phone: "133",
+          code: "11",
+          password: "123",
+          passwordAgain: "456",
+        },
+        "password"
+      );
     } catch (err) {
       expect(err).toEqual(Error("password is too weak"));
     }
@@ -91,7 +97,7 @@ describe("check soke", () => {
       const errors = schema.validate({
         anime: "dog",
       });
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         anime: "type need a array",
       });
     }
@@ -99,7 +105,7 @@ describe("check soke", () => {
       const errors = schema.validate({
         anime: ["cat"],
       });
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         anime: "to min",
       });
     }
@@ -107,7 +113,7 @@ describe("check soke", () => {
       const errors = schema.validate({
         anime: ["cat", "fish2"],
       });
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         anime: "pick warn",
       });
     }
@@ -115,7 +121,7 @@ describe("check soke", () => {
       const errors = schema.validate({
         anime: ["cat", "fish"],
       });
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         anime: "",
       });
       // throw "aa";
@@ -164,7 +170,7 @@ describe("check soke", () => {
       cat: "123123Qwe",
     };
     let v2 = schema.dto(value);
-    expect(value).toEqual({
+    expect(v2).toEqual({
       name: "aaa",
       phone: "13333333333",
       email: "mail@qqq.com",
@@ -173,8 +179,6 @@ describe("check soke", () => {
       passwordAgain: "123123Qwe",
       agree: true,
     });
-
-    expect(v2).toEqual(value);
   });
 
   test("check min max", async () => {
@@ -189,7 +193,7 @@ describe("check soke", () => {
         age: 100,
       });
 
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         name: "to min",
         age: "to max",
       });
@@ -200,7 +204,7 @@ describe("check soke", () => {
         age: 4,
       });
 
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         name: "",
         age: "",
       });
@@ -211,7 +215,7 @@ describe("check soke", () => {
         age: 6,
       });
 
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         name: "",
         age: "",
       });
@@ -222,7 +226,7 @@ describe("check soke", () => {
         age: 7,
       });
 
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         name: "to max",
         age: "to max",
       });
@@ -242,7 +246,7 @@ describe("check soke", () => {
         age: "20",
       });
 
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         age: "need number",
       });
     }
@@ -251,7 +255,7 @@ describe("check soke", () => {
         age: 0,
       });
 
-      expect(errors).toEqual({
+      expect(errors.errors).toEqual({
         age: "to min",
       });
     }
