@@ -260,4 +260,78 @@ describe("check soke", () => {
       });
     }
   });
+  test("soke object", async () => {
+    const schema = soke.object({
+      obj: soke.object({
+        name: soke.string().min(2, "to min").max(4, "to max"),
+        age: soke.number("need number").min(4, "to min").max(6, "to max"),
+      }),
+    });
+
+    {
+      const errors = schema.validate({
+        obj: "20",
+      });
+
+      expect(errors.errors).toEqual({
+        obj: "Need a object",
+      });
+    }
+    {
+      const errors = schema.validate({
+        obj: {
+          name: "200",
+        },
+      });
+
+      expect(errors.errors).toEqual({
+        obj: "to min",
+      });
+    }
+    {
+      const errors = schema.validate({
+        obj: {
+          name: "200",
+          age: 5,
+        },
+      });
+
+      expect(errors.errors).toEqual({
+        obj: "",
+      });
+    }
+    {
+      try {
+        const val = schema.dto({
+          obj: {
+            name: "200",
+            age: "5",
+          },
+        });
+        expect(val).toEqual({
+          obj: {
+            age: 5,
+            name: "200",
+          },
+        });
+      } catch (err) {
+        expect(err).toEqual(new Error("need number"));
+      }
+    }
+    {
+      const val = schema.dto({
+        obj: {
+          name: "200",
+          age: 5,
+          fish: "the fish",
+        },
+      });
+      expect(val).toEqual({
+        obj: {
+          age: 5,
+          name: "200",
+        },
+      });
+    }
+  });
 });

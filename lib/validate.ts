@@ -1,19 +1,14 @@
 import { rights } from "./right";
-import { SchemaItem, ValidateValue } from "./types";
-
-export interface ValidateOptions {
-  key?: string;
-  first?: boolean;
-}
-
-export interface ValidateResponse {
-  errors: Record<string, string>;
-  error: string;
-  path: string;
-}
+import {
+  Schema,
+  Soke,
+  ValidateOptions,
+  ValidateResponse,
+  ValidateValue,
+} from "./types";
 
 export function validate(
-  schema: Record<string, SchemaItem>,
+  schema: Schema,
   values: Record<string, any>,
   { first, key }: ValidateOptions = {}
 ): ValidateResponse {
@@ -24,8 +19,17 @@ export function validate(
     if (!schema[key]) {
       return "";
     }
-    const item = (schema[key] as any).__soke as ValidateValue;
     const value = values[key];
+    const theSchema = schema[key] as Soke;
+    if (theSchema.isSoke) {
+      if (typeof value !== "object") {
+        return theSchema.objectError;
+      }
+      const err = validate(theSchema.schema, value, { first: true });
+      return err.error;
+    }
+    const item = (schema[key] as any).__soke as ValidateValue;
+
     if (value !== void 0 && !rights.type(value, item.type)) {
       return item.errors.type;
     }
@@ -47,7 +51,7 @@ export function validate(
     if (item.equalByKey && value !== values[item.equalByKey]) {
       return item.errors.equalByKey;
     }
-    if (item.matches.length) {
+    if (item.matches && item.matches.length) {
       for (let i = 0; i < item.matches.length; i++) {
         const re = item.matches[i];
         if (!re.test(value)) {

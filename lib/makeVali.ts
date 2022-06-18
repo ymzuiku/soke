@@ -1,6 +1,105 @@
-import { SchemaItem, Types, ValidateValue } from "./types";
+import {
+  SchemaItemBool,
+  SchemaItemNumber,
+  SchemaItemString,
+  Types,
+  ValidateValue,
+} from "./types";
 
-export function makeVali(defType: Types, defErr?: string): SchemaItem {
+export function makeValiNumber(
+  defType: Types,
+  defErr?: string
+): SchemaItemNumber {
+  const __soke = {
+    type: defType,
+    errors: {
+      type: defErr || "Need type is: " + defType,
+    },
+  } as any as ValidateValue;
+
+  const out = {
+    __soke,
+    required: (e?: string) => {
+      out.__soke.errors.required = e || defErr || "Need required";
+      out.__soke.requred = true;
+      return out;
+    },
+
+    len: (len: number, e?: string) => {
+      out.__soke.errors.len = e || defErr || "Length no equal: " + len;
+      out.__soke.len = len;
+      return out;
+    },
+    equal: (val: any, e?: string) => {
+      out.__soke.errors.equal = e || defErr || "Not equal the val";
+      out.__soke.equal = val;
+      return out;
+    },
+    equalByKey: (key: string, e?: string) => {
+      out.__soke.errors.equalByKey = e || defErr || "Not equal by: " + key;
+      out.__soke.equalByKey = key;
+      return out;
+    },
+    min: (min: number, e?: string) => {
+      out.__soke.errors.min = e || defErr || "Need min: " + min;
+      out.__soke.min = min;
+      return out;
+    },
+    max: (max: number, e?: string) => {
+      out.__soke.errors.max = e || defErr || "Need max: " + max;
+      out.__soke.max = max;
+      return out;
+    },
+    pick: (list: Array<string>, e?: string) => {
+      out.__soke.errors.pick = e || defErr || "Need in list: " + list;
+      out.__soke.pick = new Set(list);
+      return out;
+    },
+    notPick: (list: Array<string>, e?: string) => {
+      out.__soke.errors.notPick = e || defErr || "Need not in list: " + list;
+      out.__soke.notPick = new Set(list);
+      return out;
+    },
+  };
+
+  return out as any;
+}
+
+export function makeValiBool(defType: Types, defErr?: string): SchemaItemBool {
+  const __soke = {
+    type: defType,
+    errors: {
+      type: defErr || "Need type is: " + defType,
+    },
+  } as any as ValidateValue;
+
+  const out = {
+    __soke,
+    required: (e?: string) => {
+      out.__soke.errors.required = e || defErr || "Need required";
+      out.__soke.requred = true;
+      return out;
+    },
+
+    equal: (val: any, e?: string) => {
+      out.__soke.errors.equal = e || defErr || "Not equal the val";
+      out.__soke.equal = val;
+      return out;
+    },
+    equalByKey: (key: string, e?: string) => {
+      out.__soke.errors.equalByKey = e || defErr || "Not equal by: " + key;
+      out.__soke.equalByKey = key;
+      return out;
+    },
+  };
+
+  return out as any;
+}
+
+export function makeValiString(
+  defType: Types,
+  defErr?: string
+): SchemaItemString {
   const __soke = {
     type: defType,
     errors: {
