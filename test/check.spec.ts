@@ -315,9 +315,10 @@ describe("check soke", () => {
           },
         });
       } catch (err) {
-        expect(err).toEqual(new Error("need number"));
+        expect(err).toEqual(undefined);
       }
     }
+
     {
       const val = schema.dto({
         obj: {

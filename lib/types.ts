@@ -3,6 +3,7 @@ export type Types = "string" | "array" | "object" | "number" | "boolean";
 export interface ValidateOptions {
   key?: string;
   first?: boolean;
+  typeChange?: boolean;
 }
 
 export interface ValidateResponse {

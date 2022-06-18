@@ -30,7 +30,10 @@ function sokeSchema(schema: Schema, e?: string): Soke {
       return true;
     },
     dto: <T>(value: T): T => {
-      const err = validate(schema, value);
+      const err = validate(schema, value, {
+        typeChange: true,
+      });
+
       if (err.error) {
         throw new Error(err.error);
       }

@@ -10,7 +10,7 @@ import {
 export function validate(
   schema: Schema,
   values: Record<string, any>,
-  { first, key }: ValidateOptions = {}
+  { first, key, typeChange }: ValidateOptions = {}
 ): ValidateResponse {
   let error = "";
   let path = "";
@@ -19,20 +19,24 @@ export function validate(
     if (!schema[key]) {
       return "";
     }
-    const value = values[key];
+    let value = values[key];
     const theSchema = schema[key] as Soke;
     if (theSchema.isSoke) {
       if (typeof value !== "object") {
         return theSchema.objectError;
       }
-      const err = validate(theSchema.schema, value, { first: true });
+      const err = validate(theSchema.schema, value, {
+        first: true,
+        typeChange,
+      });
       return err.error;
     }
     const item = (schema[key] as any).__soke as ValidateValue;
 
-    if (value !== void 0 && !rights.type(value, item.type)) {
+    if (value !== void 0 && !rights.type(values, key, item.type, typeChange)) {
       return item.errors.type;
     }
+    value = values[key];
     if (item.requred && !value && typeof value !== "number") {
       return item.errors.required;
     }

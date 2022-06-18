@@ -1,15 +1,37 @@
 import { Types } from "./types";
 
 export const rights = {
-  type: (value: any, type?: Types) => {
+  type: (values: any, key: string, type?: Types, typeChange?: boolean) => {
     if (type === undefined) {
       return true;
     }
+    const value = values[key];
     if (type === "array" && Array.isArray(value)) {
       return true;
     }
 
-    return typeof value === type;
+    const t = typeof value;
+    if (typeChange && t !== type) {
+      if (type === "number") {
+        const nextVal = Number(value);
+        if (isNaN(nextVal)) {
+          return false;
+        }
+        values[key] = nextVal;
+        return true;
+      } else if (type === "string") {
+        if (type === undefined || type === null) {
+          return false;
+        }
+        values[key] = value + "";
+        return true;
+      } else if (type === "boolean") {
+        values[key] = !!value;
+        return true;
+      }
+    }
+
+    return t === type;
   },
   min: (value: any, min?: number) => {
     if (min === undefined) {
